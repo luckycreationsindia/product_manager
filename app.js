@@ -68,6 +68,16 @@ app.use('/', indexRouter);
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 
+const category = require('./routes/category.route'); // Imports routes for the categories
+const categoryadmin = require('./routes/categoryadmin.route'); // Imports routes for the categories
+const product = require('./routes/product.route'); // Imports routes for the products
+const productadmin = require('./routes/productadmin.route'); // Imports routes for the products
+
+app.use('/api/category', category);
+app.use('/api/admin/category', categoryadmin);
+app.use('/api/product', product);
+app.use('/api/admin/product', productadmin);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
