@@ -11,6 +11,11 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const fileUpload = require('express-fileupload');
 const path = require('path');
 
+function getExtension(filename) {
+  let i = filename.lastIndexOf('.');
+  return (i < 0) ? '' : filename.substr(i);
+}
+
 dotenv.config({path: './config/config.env'});
 
 global.dbConfig = require("./config/db.config");
@@ -39,7 +44,8 @@ const corsOptions = {
       callback(null, true);
       //callback(new Error())
     }
-  }
+  },
+  credentials: true
 }
 
 app.use(cors(corsOptions));
@@ -64,30 +70,37 @@ app.use(passport.session());
 
 const middlewares = require('./middlewares');
 
-app.use(fileUpload({
-  limits: { fileSize: 50 * 1024 * 1024 },
-  useTempFiles : true,
-  tempFileDir : '/tmp/'
-}));
-
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');
 const categoryRouter = require('./routes/category');
 const productRouter = require('./routes/product');
 const s3Manager = require('./services/s3manager');
 
+// app.use((req, res, next) => {
+//   console.log(req.headers);
+//   next();
+// });
+
 app.use('/', indexRouter);
 app.use('/', userRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+  useTempFiles : true,
+  tempFileDir : '/tmp/'
+}));
 app.post('/upload', middlewares.adminCheck, function(req, res, next) {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
 
-  let file = req.files.file.tempFilePath;
-  s3Manager.uploadFile(file, path.extname(req.files.file.name), (err, result) => {
+  req.files = Object.assign({},req.files)['file'];
+  let file = req.files.tempFilePath;
+  let fileName = req.files.name;
+  let ext = getExtension(fileName);
+  s3Manager.uploadFile(file, ext, (err, result) => {
     if(err) {
       next(err);
     } else {
