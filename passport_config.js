@@ -1,7 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
-const db = require("./model");
-const User = db.user;
-const Role = db.role;
+const User = require("./models/user");
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
@@ -67,48 +65,15 @@ module.exports = function (passport) {
                 state: req.body.state,
                 country: req.body.country,
                 pincode: req.body.pincode,
+                role: 0,
+                status: false
             });
 
             user.save(function (err, user) {
                 if (err) {
                     return done(err);
                 } else {
-                    if (req.body.roles) {
-                        Role.find(
-                            {
-                                name: { $in: req.body.roles }
-                            },
-                            (err, roles) => {
-                                if (err) {
-                                    return done(err);
-                                }
-
-                                user.roles = roles.map(role => role._id);
-                                user.save(err => {
-                                    if (err) {
-                                        return done(err);
-                                    }
-
-                                    return done(null, false, {status: 'Success', message: 'Registration Successful'});
-                                });
-                            }
-                        );
-                    } else {
-                        Role.findOne({ name: "user" }, (err, role) => {
-                            if (err) {
-                                return done(err);
-                            }
-
-                            user.roles = [role._id];
-                            user.save(err => {
-                                if (err) {
-                                    return done(err);
-                                }
-
-                                return done(null, false, {status: 'Success', message: 'Registration Successful'});
-                            });
-                        });
-                    }
+                    return done(null, false, {status: 'Success', message: 'Registration Successful'});
                 }
             });
         }));
@@ -147,7 +112,6 @@ module.exports = function (passport) {
                     }
 
                     req.session.username = user.email;
-                    req.session.displayName = user.first_name;
                     return done(null, user);
                 } catch (err) {
                     done(null, false, {status: 'Error', message: 'Error connecting to database'});

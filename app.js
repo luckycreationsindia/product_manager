@@ -11,10 +11,8 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 dotenv.config({path: './config/config.env'});
 
-const db = require("./model");
 global.dbConfig = require("./config/db.config");
 const authConfig = require("./config/auth.config");
-const Role = db.role;
 
 require('./mongo_connector')();
 const sessionStore = new MongoDBStore({
@@ -63,20 +61,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const indexRouter = require('./routes/index');
+const userRouter = require('./routes/users');
+const middlewares = require('./middlewares');
+const categoryRouter = require('./routes/category');
+const productRouter = require('./routes/product');
 
 app.use('/', indexRouter);
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
-
-const category = require('./routes/category.route'); // Imports routes for the categories
-const categoryadmin = require('./routes/categoryadmin.route'); // Imports routes for the categories
-const product = require('./routes/product.route'); // Imports routes for the products
-const productadmin = require('./routes/productadmin.route'); // Imports routes for the products
-
-app.use('/api/category', category);
-app.use('/api/admin/category', categoryadmin);
-app.use('/api/product', product);
-app.use('/api/admin/product', productadmin);
+app.use('/', userRouter);
+app.use('/api/category', categoryRouter);
+app.use('/api/product', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -95,39 +88,6 @@ app.use(function(err, req, res, next) {
 });
 
 function initial() {
-  Role.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: "user"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: "moderator"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
-      });
-
-      new Role({
-        name: "admin"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'admin' to roles collection");
-      });
-    }
-  });
 }
 
 initial();

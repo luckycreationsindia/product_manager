@@ -1,18 +1,16 @@
-// importing modules
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    email: {type: String, required:true, unique:true},
+    email: {type: String, required: true, unique: true},
     password: {
         type: String,
         required: true,
     },
-    first_name : {type: String, required:true},
-    last_name : {type: String},
+    first_name: {type: String, required: true},
+    last_name: {type: String},
     mobile: {
-        type: Number,
-        required: true,
+        type: Number
     },
     status: {
         type: Boolean,
@@ -32,19 +30,17 @@ const UserSchema = new Schema({
         default: "India",
     },
     pincode: Number,
-    roles: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Role"
-        }
-    ],
+    role: {
+        type: Number,
+        default: 0
+    },
 }, {timestamps: true, collection: 'users'});
 
 UserSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 
-UserSchema.virtual('displayName').get(function () {
+UserSchema.virtual('display_name').get(function () {
     return getDisplayName(this);
 });
 
@@ -60,5 +56,4 @@ function getDisplayName(x) {
     return name;
 }
 
-// export userschema
-module.exports = mongoose.model("User", UserSchema, "users");
+module.exports = mongoose.model('User', UserSchema, "users");

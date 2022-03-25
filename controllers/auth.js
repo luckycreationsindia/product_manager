@@ -29,3 +29,10 @@ exports.signin = (req, res, next) => {
         });
     })(req, res, next);
 };
+
+exports.logout = (req, res, next) => {
+    req.logout();
+    req.session.destroy(()=>{
+        res.json({status: "Success", message: "Success"});
+    });
+};
