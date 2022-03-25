@@ -8,6 +8,8 @@ const cors = require("cors");
 const passport = require('passport');
 const passportConfig = require('./passport_config');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const fileUpload = require('express-fileupload');
+const path = require('path');
 
 dotenv.config({path: './config/config.env'});
 
@@ -60,16 +62,39 @@ app.use(sess);
 app.use(passport.initialize());
 app.use(passport.session());
 
+const middlewares = require('./middlewares');
+
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+  useTempFiles : true,
+  tempFileDir : '/tmp/'
+}));
+
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');
-const middlewares = require('./middlewares');
 const categoryRouter = require('./routes/category');
 const productRouter = require('./routes/product');
+const s3Manager = require('./services/s3manager');
 
 app.use('/', indexRouter);
 app.use('/', userRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
+
+app.post('/upload', middlewares.adminCheck, function(req, res, next) {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  let file = req.files.file.tempFilePath;
+  s3Manager.uploadFile(file, path.extname(req.files.file.name), (err, result) => {
+    if(err) {
+      next(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -86,10 +111,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json({"status": "Error", "message": err.message || "Unknown Error"});
 });
-
-function initial() {
-}
-
-initial();
 
 module.exports = app;

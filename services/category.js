@@ -2,10 +2,12 @@ let Model = require('../models/category');
 
 let add = (data, next) => {
     let category = new Model({
-        name: data.name,
-        description: data.description || "",
-        status: data.status || false
+        name: data.name
     });
+
+    if(data.hasOwnProperty("description")) category.description = data.description;
+    if(data.hasOwnProperty("images")) category.images = data.images;
+    if(data.hasOwnProperty("status")) category.status = data.status;
 
     category.save((err, category) => {
         if (err) {
@@ -25,6 +27,11 @@ let update = (data, next) => {
         description: data.description || "",
         status: data.status || false
     }
+
+    if(data.hasOwnProperty("name")) category.name = data.name;
+    if(data.hasOwnProperty("description")) category.description = data.description;
+    if(data.hasOwnProperty("images")) category.images = data.images;
+    if(data.hasOwnProperty("status")) category.status = data.status;
 
     Model.findByIdAndUpdate(data.id, category, {new: true}, function (err, result) {
         if (err) {

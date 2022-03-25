@@ -11,6 +11,13 @@ let add = (data, next) => {
         discount: data.discount || 0
     });
 
+    if(data.hasOwnProperty("description")) product.description = data.description;
+    if(data.hasOwnProperty("images")) product.images = data.images;
+    if(data.hasOwnProperty("status")) product.status = data.status;
+    if(data.hasOwnProperty("price")) product.price = data.price;
+    if(data.hasOwnProperty("tax")) product.tax = data.tax;
+    if(data.hasOwnProperty("discount")) product.discount = data.discount;
+
     product.save((err, result) => {
         if (err) {
             if (err.code === 11000) {
@@ -26,13 +33,15 @@ let add = (data, next) => {
 let update = (data, next) => {
     let product = {
         category: data.category,
-        name: data.name,
-        description: data.description || "",
-        status: data.status || false,
-        price: data.price || 0,
-        tax: data.tax || 0,
-        discount: data.discount || 0
     }
+
+    if(data.hasOwnProperty("name")) product.name = data.name;
+    if(data.hasOwnProperty("description")) product.description = data.description;
+    if(data.hasOwnProperty("images")) product.images = data.images;
+    if(data.hasOwnProperty("status")) product.status = data.status;
+    if(data.hasOwnProperty("price")) product.price = data.price;
+    if(data.hasOwnProperty("tax")) product.tax = data.tax;
+    if(data.hasOwnProperty("discount")) product.discount = data.discount;
 
     Model.findByIdAndUpdate(data.id, product, {new: true}, function (err, result) {
         if (err) {
