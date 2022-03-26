@@ -53,7 +53,11 @@ let update = (data, next) => {
 }
 
 let load = (data, next) => {
-    Model.find({}, (err, result) => {
+    let filter = {};
+    if(data && data.hasOwnProperty('cid')) {
+        filter['category'] = data.cid;
+    }
+    Model.find(filter, (err, result) => {
         if (err) {
             next(err);
         } else {
