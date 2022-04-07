@@ -48,7 +48,7 @@ exports.load = async (req, res, next) => {
 };
 
 exports.loadAll = async (req, res, next) => {
-    Service.load(req.body, (err, result) => {
+    Service.loadAll(req.body, (err, result) => {
         if(err) {
             next(err);
         } else {

@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const Controller = require('../controllers/category');
+const Controller = require('../controllers/blog');
 const middlewares = require('../middlewares');
 
-/* Add New Category */
+/* Add New Blog */
 router.post('/add', middlewares.adminCheck, Controller.add);
 
-/* Update Category */
+/* Update Blog */
 router.post('/update', middlewares.adminCheck, Controller.update);
 
-/* Load All Categories */
+/* Load All Blogs */
 router.get('/', middlewares.adminCheck, Controller.loadAll);
 
-/* Load Categories */
+/* Load Blogs */
 router.post('/', Controller.load);
 
 module.exports = router;

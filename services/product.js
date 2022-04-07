@@ -53,6 +53,20 @@ let update = (data, next) => {
 }
 
 let load = (data, next) => {
+    let filter = {status: true};
+    if(data && data.hasOwnProperty('cid')) {
+        filter['category'] = data.cid;
+    }
+    Model.find(filter, (err, result) => {
+        if (err) {
+            next(err);
+        } else {
+            next(null, result);
+        }
+    });
+}
+
+let loadAll = (data, next) => {
     let filter = {};
     if(data && data.hasOwnProperty('cid')) {
         filter['category'] = data.cid;
@@ -69,5 +83,6 @@ let load = (data, next) => {
 module.exports = {
     add,
     update,
-    load
+    load,
+    loadAll
 }

@@ -1,18 +1,18 @@
-let Model = require('../models/category');
+let Model = require('../models/blog');
 
 let add = (data, next) => {
-    let category = new Model({
-        name: data.name
+    let d = new Model({
+        name: data.name,
+        description: data.description,
+        image: data.image
     });
 
-    if(data.hasOwnProperty("description")) category.description = data.description;
-    if(data.hasOwnProperty("images")) category.images = data.images;
-    if(data.hasOwnProperty("status")) category.status = data.status;
+    if(data.hasOwnProperty("status")) d.status = data.status;
 
-    category.save((err, category) => {
+    d.save((err, category) => {
         if (err) {
             if (err.code === 11000) {
-                return next(new Error("Category Already Exist"));
+                return next(new Error("Blog Already Exist"));
             }
             next(err);
         } else {
@@ -22,18 +22,16 @@ let add = (data, next) => {
 }
 
 let update = (data, next) => {
-    let category = {
+    let d = {
         name: data.name,
-        description: data.description || "",
+        image: data.image,
+        description: data.description,
         status: data.status || false
     }
 
-    if(data.hasOwnProperty("name")) category.name = data.name;
-    if(data.hasOwnProperty("description")) category.description = data.description;
-    if(data.hasOwnProperty("images")) category.images = data.images;
-    if(data.hasOwnProperty("status")) category.status = data.status;
+    if(data.hasOwnProperty("status")) d.status = data.status;
 
-    Model.findByIdAndUpdate(data.id, category, {new: true}, function (err, result) {
+    Model.findByIdAndUpdate(data.id, d, {new: true}, function (err, result) {
         if (err) {
             return next(err);
         } else {

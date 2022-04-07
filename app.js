@@ -74,6 +74,8 @@ const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');
 const categoryRouter = require('./routes/category');
 const productRouter = require('./routes/product');
+const bannerRouter = require('./routes/banner');
+const blogRouter = require('./routes/blog');
 const s3Manager = require('./services/s3manager');
 
 // app.use((req, res, next) => {
@@ -85,6 +87,8 @@ app.use('/', indexRouter);
 app.use('/', userRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
+app.use('/api/banner', bannerRouter);
+app.use('/api/blog', blogRouter);
 
 app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },

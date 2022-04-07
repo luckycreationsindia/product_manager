@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/product');
+const middlewares = require('../middlewares');
 
 /* Add New Product */
-router.post('/add', Controller.add);
+router.post('/add', middlewares.adminCheck, Controller.add);
 
 /* Update Product */
-router.post('/update', Controller.update);
+router.post('/update', middlewares.adminCheck, Controller.update);
 
 /* Load All Products */
-router.get('/', Controller.loadAll);
+router.get('/', middlewares.adminCheck, Controller.loadAll);
 
 /* Load Products */
 router.post('/', Controller.load);
