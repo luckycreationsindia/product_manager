@@ -2,6 +2,7 @@ const AWS = require("aws-sdk");
 const fs = require("fs");
 const nanoid = require("nanoid");
 const path = require('path');
+const mime = require('mime');
 const authConfig = require("../config/auth.config");
 
 AWS.config.update({region: 'us-east-1'});
@@ -28,4 +29,22 @@ const uploadFile = (filePath, ext, next) => {
     });
 };
 
-module.exports = {uploadFile};
+const getFile = function (req, res, next) {
+    try {
+        let key = req.params.file;
+        let params = {Bucket: authConfig.aws.bucket, Key: key};
+        let mimeType = mime.getType(key);
+        s3.getObject(params)
+            .on('httpHeaders', function (statusCode, headers) {
+                res.set('Content-Length', headers['content-length']);
+                res.set('Content-Type', mimeType);
+                this.response.httpResponse.createUnbufferedStream()
+                    .pipe(res);
+            })
+            .send();
+    } catch (e) {
+        next(e);
+    }
+}
+
+module.exports = {uploadFile, getFile};

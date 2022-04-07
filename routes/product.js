@@ -12,6 +12,9 @@ router.post('/update', middlewares.adminCheck, Controller.update);
 /* Load All Products */
 router.get('/', middlewares.adminCheck, Controller.loadAll);
 
+/* Load All Products */
+router.post('/loadAll', middlewares.adminCheck, Controller.loadAll);
+
 /* Load Products */
 router.post('/', Controller.load);
 

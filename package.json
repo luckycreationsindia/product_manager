@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1101.0",
-    "nanoid": "^3.3.1",
     "bcryptjs": "^2.4.3",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.6",
@@ -19,8 +18,10 @@
     "express-fileupload": "^1.3.1",
     "express-session": "^1.17.2",
     "http-errors": "^2.0.0",
+    "mime": "^3.0.0",
     "mongoose": "^6.2.4",
     "morgan": "^1.10.0",
+    "nanoid": "^3.3.1",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.1.0"
