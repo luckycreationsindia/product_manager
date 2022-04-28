@@ -10,6 +10,7 @@ const ProductSchema = new Schema({
     price: {type: Number, min: 0, default: 0},
     tax: {type: Number, min: 0, default: 0},
     discount: {type: Number, min: 0, default: 0},
+    size: {type: String},
     status: {
         type: Boolean,
         default: false
