@@ -3,6 +3,6 @@ module.exports = {
     aws: {
         accessKeyId: process.env.AWS_ACCESS_KEY,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        bucket: process.env.PRODUCT_MANAGER_S3_BUCKET || "product-manager-test-4d3a765ca6d515c15"
+        bucket: process.env.PRODUCT_MANAGER_S3_BUCKET
     },
 };

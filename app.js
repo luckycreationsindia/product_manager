@@ -9,14 +9,13 @@ const passport = require('passport');
 const passportConfig = require('./passport_config');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const fileUpload = require('express-fileupload');
-const path = require('path');
 
 function getExtension(filename) {
   let i = filename.lastIndexOf('.');
   return (i < 0) ? '' : filename.substr(i);
 }
 
-dotenv.config({path: './config/config.env'});
+dotenv.config({path: './custom.env'});
 
 global.dbConfig = require("./config/db.config");
 const authConfig = require("./config/auth.config");
