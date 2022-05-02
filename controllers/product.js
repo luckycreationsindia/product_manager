@@ -7,6 +7,9 @@ exports.add = async (req, res, next) => {
     if (!req.body.category) {
         return res.json({status: 'Error', message: 'Category is Required.'});
     }
+    if (!req.body.sku) {
+        return res.json({status: 'Error', message: 'SKU is Required.'});
+    }
 
     Service.add(req.body, (err, result) => {
         if(err) {
@@ -23,6 +26,9 @@ exports.update = async (req, res, next) => {
     }
     if (!req.body.category) {
         return res.json({status: 'Error', message: 'Category is Required.'});
+    }
+    if (!req.body.sku) {
+        return res.json({status: 'Error', message: 'SKU is Required.'});
     }
     if (!req.body.id) {
         return res.json({status: 'Error', message: 'Product ID is Required.'});

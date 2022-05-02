@@ -4,6 +4,7 @@ let add = (data, next) => {
     let product = new Model({
         category: data.category,
         name: data.name,
+        sku: data.sku,
         description: data.description || "",
         size: data.size,
         status: data.status || false,
@@ -44,6 +45,7 @@ let update = (data, next) => {
     if (data.hasOwnProperty("tax")) product.tax = data.tax;
     if (data.hasOwnProperty("discount")) product.discount = data.discount;
     if (data.hasOwnProperty("size")) product.size = data.size;
+    if (data.hasOwnProperty("sku")) product.sku = data.sku;
 
     Model.findByIdAndUpdate(data.id, product, {new: true}, function (err, result) {
         if (err) {

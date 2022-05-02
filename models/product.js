@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
     category: {type: Schema.Types.ObjectId, ref: "Category", required: true},
+    sku: {type: String, required: true, unique: true},
     name: {type: String, required: true},
     shortDescription: {type: String},
     description: {type: String},
