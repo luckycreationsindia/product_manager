@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
-    category: {type: Schema.Types.ObjectId, ref: "categories", required: true},
+    category: {type: Schema.Types.ObjectId, ref: "Category", required: true},
     name: {type: String, required: true},
     shortDescription: {type: String},
     description: {type: String},
@@ -15,10 +15,18 @@ const ProductSchema = new Schema({
         type: Boolean,
         default: false
     },
-}, {timestamps: true, collection: 'products'});
+}, {toJSON: { virtuals: true }, toObject: {virtuals: true}, timestamps: true, collection: 'products'});
 
 ProductSchema.virtual('id').get(function () {
     return this._id.toHexString();
+});
+
+ProductSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: "category",
+        select: " _id name",
+    });
+    next()
 });
 
 module.exports = mongoose.model('Product', ProductSchema, "products");

@@ -12,12 +12,12 @@ let add = (data, next) => {
         discount: data.discount || 0
     });
 
-    if(data.hasOwnProperty("description")) product.description = data.description;
-    if(data.hasOwnProperty("images")) product.images = data.images;
-    if(data.hasOwnProperty("status")) product.status = data.status;
-    if(data.hasOwnProperty("price")) product.price = data.price;
-    if(data.hasOwnProperty("tax")) product.tax = data.tax;
-    if(data.hasOwnProperty("discount")) product.discount = data.discount;
+    if (data.hasOwnProperty("description")) product.description = data.description;
+    if (data.hasOwnProperty("images")) product.images = data.images;
+    if (data.hasOwnProperty("status")) product.status = data.status;
+    if (data.hasOwnProperty("price")) product.price = data.price;
+    if (data.hasOwnProperty("tax")) product.tax = data.tax;
+    if (data.hasOwnProperty("discount")) product.discount = data.discount;
 
     product.save((err, result) => {
         if (err) {
@@ -36,14 +36,14 @@ let update = (data, next) => {
         category: data.category,
     }
 
-    if(data.hasOwnProperty("name")) product.name = data.name;
-    if(data.hasOwnProperty("description")) product.description = data.description;
-    if(data.hasOwnProperty("images")) product.images = data.images;
-    if(data.hasOwnProperty("status")) product.status = data.status;
-    if(data.hasOwnProperty("price")) product.price = data.price;
-    if(data.hasOwnProperty("tax")) product.tax = data.tax;
-    if(data.hasOwnProperty("discount")) product.discount = data.discount;
-    if(data.hasOwnProperty("size")) product.size = data.size;
+    if (data.hasOwnProperty("name")) product.name = data.name;
+    if (data.hasOwnProperty("description")) product.description = data.description;
+    if (data.hasOwnProperty("images")) product.images = data.images;
+    if (data.hasOwnProperty("status")) product.status = data.status;
+    if (data.hasOwnProperty("price")) product.price = data.price;
+    if (data.hasOwnProperty("tax")) product.tax = data.tax;
+    if (data.hasOwnProperty("discount")) product.discount = data.discount;
+    if (data.hasOwnProperty("size")) product.size = data.size;
 
     Model.findByIdAndUpdate(data.id, product, {new: true}, function (err, result) {
         if (err) {
@@ -58,10 +58,10 @@ let load = (data, next) => {
     let filter = {status: true};
     let limit = 10;
     let skip = 0;
-    if(data && data.hasOwnProperty('cid') && data.cid) {
+    if (data && data.hasOwnProperty('cid') && data.cid) {
         filter['category'] = data.cid;
     }
-    if(data && data.hasOwnProperty('page') && data.page) {
+    if (data && data.hasOwnProperty('page') && data.page) {
         skip = parseInt(data.page);
         skip > 0 ? skip -= 1 : skip;
     }
@@ -86,10 +86,10 @@ let loadSingle = (id, next) => {
 
 let loadAll = (data, next) => {
     let filter = {};
-    if(data && data.hasOwnProperty('cid')) {
+    if (data && data.hasOwnProperty('cid')) {
         filter['category'] = data.cid;
     }
-    if(data && data.hasOwnProperty('id')) {
+    if (data && data.hasOwnProperty('id')) {
         filter['_id'] = data.id;
     }
     Model.find(filter, (err, result) => {
