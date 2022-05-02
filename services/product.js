@@ -74,8 +74,12 @@ let load = (data, next) => {
     });
 }
 
-let loadSingle = (id, next) => {
-    Model.findById(id, (err, result) => {
+let loadSingle = (data, next) => {
+    let filter = {_id: data.id};
+    if(!data.isAdmin) {
+        filter.status = true;
+    }
+    Model.findOne(filter, (err, result) => {
         if (err) {
             next(err);
         } else {

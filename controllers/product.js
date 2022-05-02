@@ -48,7 +48,9 @@ exports.load = async (req, res, next) => {
 };
 
 exports.loadSingle = async (req, res, next) => {
-    Service.loadSingle(req.params.id, (err, result) => {
+    let data = {id: req.params.id};
+    data.isAdmin = req.user && req.user.role === 1;
+    Service.loadSingle(data, (err, result) => {
         if(err) {
             next(err);
         } else {
