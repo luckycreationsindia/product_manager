@@ -56,10 +56,26 @@ let update = (data, next) => {
 
 let load = (data, next) => {
     let filter = {status: true};
-    if(data && data.hasOwnProperty('cid')) {
+    let limit = 10;
+    let skip = 0;
+    if(data && data.hasOwnProperty('cid') && data.cid) {
         filter['category'] = data.cid;
     }
-    Model.find(filter, (err, result) => {
+    if(data && data.hasOwnProperty('page') && data.page) {
+        skip = parseInt(data.page);
+        skip > 0 ? skip -= 1 : skip;
+    }
+    Model.find(filter, {}, {limit: limit, skip: limit * skip}, (err, result) => {
+        if (err) {
+            next(err);
+        } else {
+            next(null, result);
+        }
+    });
+}
+
+let loadSingle = (id, next) => {
+    Model.findById(id, (err, result) => {
         if (err) {
             next(err);
         } else {
@@ -72,6 +88,9 @@ let loadAll = (data, next) => {
     let filter = {};
     if(data && data.hasOwnProperty('cid')) {
         filter['category'] = data.cid;
+    }
+    if(data && data.hasOwnProperty('id')) {
+        filter['_id'] = data.id;
     }
     Model.find(filter, (err, result) => {
         if (err) {
@@ -86,5 +105,6 @@ module.exports = {
     add,
     update,
     load,
-    loadAll
+    loadAll,
+    loadSingle
 }

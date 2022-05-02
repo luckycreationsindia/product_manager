@@ -9,6 +9,9 @@ router.post('/add', middlewares.adminCheck, Controller.add);
 /* Update Product */
 router.post('/update', middlewares.adminCheck, Controller.update);
 
+/* Load Single Products */
+router.get('/:id', middlewares.adminCheck, Controller.loadSingle);
+
 /* Load All Products */
 router.get('/', middlewares.adminCheck, Controller.loadAll);
 
