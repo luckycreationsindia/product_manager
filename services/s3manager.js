@@ -3,13 +3,12 @@ const fs = require("fs");
 const nanoid = require("nanoid");
 const path = require('path');
 const mime = require('mime');
-const authConfig = require("../config/auth.config");
 
 AWS.config.update({region: 'us-east-1'});
 
 const s3 = new AWS.S3({
-    accessKeyId: authConfig.aws.accessKeyId,
-    secretAccessKey: authConfig.aws.secretAccessKey
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 const uploadFile = (filePath, ext, next) => {
@@ -17,7 +16,7 @@ const uploadFile = (filePath, ext, next) => {
         if (err) return next(err);
         let fileName = nanoid.nanoid() + (ext || path.extname(filePath));
         const params = {
-            Bucket: authConfig.aws.bucket,
+            Bucket: process.env.PRODUCT_MANAGER_S3_BUCKET,
             Key: fileName,
             Body: data,
             ACL: "public-read"
@@ -32,7 +31,7 @@ const uploadFile = (filePath, ext, next) => {
 const getFile = function (req, res, next) {
     try {
         let key = req.params.file;
-        let params = {Bucket: authConfig.aws.bucket, Key: key};
+        let params = {Bucket: process.env.PRODUCT_MANAGER_S3_BUCKET, Key: key};
         let mimeType = mime.getType(key);
         s3.getObject(params)
             .on('httpHeaders', function (statusCode, headers) {

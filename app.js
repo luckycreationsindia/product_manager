@@ -15,10 +15,9 @@ function getExtension(filename) {
   return (i < 0) ? '' : filename.substr(i);
 }
 
-dotenv.config({path: './custom.env'});
+dotenv.config();
 
 global.dbConfig = require("./config/db.config");
-const authConfig = require("./config/auth.config");
 
 require('./mongo_connector')();
 const sessionStore = new MongoDBStore({
@@ -56,7 +55,7 @@ app.use(cookieParser());
 passportConfig(passport);
 let sess = session({
   key: 'token',
-  secret: authConfig.secret,
+  secret: process.env.SESSION_SECRET,
   store: sessionStore,
   name: 'token',
   touchAfter: 24 * 3600, resave: true, saveUninitialized: true, autoRemove: 'native',
