@@ -51,8 +51,26 @@ let load = (data, next) => {
     });
 }
 
+let loadSingle = (data, next) => {
+    let filter = {_id: data.id};
+    if(!data.isAdmin) {
+        filter.status = true;
+    }
+    Model.findOne(filter, (err, result) => {
+        if (err) {
+            next(err);
+        } else {
+            next(null, result);
+        }
+    });
+}
+
 let loadAll = (data, next) => {
-    Model.find({}, (err, result) => {
+    let filter = {};
+    if (data && data.hasOwnProperty('id')) {
+        filter['_id'] = data.id;
+    }
+    Model.find(filter, (err, result) => {
         if (err) {
             next(err);
         } else {
@@ -65,5 +83,6 @@ module.exports = {
     add,
     update,
     load,
+    loadSingle,
     loadAll
 }

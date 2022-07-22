@@ -9,6 +9,9 @@ router.post('/add', middlewares.adminCheck, Controller.add);
 /* Update Banner */
 router.post('/update', middlewares.adminCheck, Controller.update);
 
+/* Load Single Banner */
+router.get('/:id', Controller.loadSingle);
+
 /* Load All Banners */
 router.get('/', middlewares.adminCheck, Controller.loadAll);
 
